@@ -1,0 +1,2 @@
+python SpaceKingsBot.py TOKEN_HERE
+pause

@@ -5,11 +5,16 @@ def getRanks():
 def getSuits(): 
     return [ "Clubs", "Diamonds", "Hearts", "Spades" ]
 
-def isSuccess(suit: str):
+def isSuccess(rank: str):
     successRanks = ['Ace','Jack','Queen','King']
-    if any(re.findall('|'.join(successRanks),suit)):
+    if any(re.findall('|'.join(successRanks),rank)):
         return True
     return False
 
-def isFailure(suit: str):
-    return suit == 'Joker'
+def isFailure(rank: str):
+    return rank == "Joker"
+
+def isQueenOfHearts(suit: str, rank: str):
+    print(str(suit == "Hearts"))
+    print(str(rank == "Queen"))
+    return suit == "Hearts" and rank == "Queen"

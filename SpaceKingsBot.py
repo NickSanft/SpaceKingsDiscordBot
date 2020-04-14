@@ -19,6 +19,9 @@ help_attrs = dict(hidden=True)
 bot = Bot(command_prefix='/', help_attrs=help_attrs)
 decksByUser = {}
 
+failureMessages = ["It couldn't be too bad, could it?", "Maybe you'll just slip on a banana peel."]
+criticalfailureMessages = ["Pray to your gods.", "Aw man, am I gonna die?", "This is funny in a cosmic sort of way."]
+
 
 
 """
@@ -46,41 +49,52 @@ Bot Commands
 """
 @bot.command()
 async def draw(ctx, numCards: int):
-    user = ctx.message.author.id
+    author = ctx.message.author
+    user = author.id
 
     if user not in decksByUser:
         await initDeck(user)
 
     numSuccesses = 0
     numFailures = 0
+    queenOfHearts = False
 
-    await ctx.send("Drawing " + str(numCards) + "...")
+    await ctx.send("Drawing " + str(numCards) + " for " + author.name + "...")
 
     for i in range(0, numCards):
         card = decksByUser[user].drawCard()
-        #if CardUtils.isSuccess(card.suit):
-            #numSuccesses += 1
-        #if CardUtils.isFailure(card.suit):
-            #numFailures += 1
-        await ctx.send("You drew: " + card.description + ". Cards left: " + str(len(decksByUser[user].cards)))
+        print(card.suit)
+        print(card.rank)
+        if CardUtils.isSuccess(card.rank):
+            numSuccesses += 1
+        if CardUtils.isFailure(card.rank):
+            numFailures += 1
+        if CardUtils.isQueenOfHearts(card.suit, card.rank):
+            queenOfHearts = True
+
+        await ctx.send(author.name + " drew: " + card.description + ". Cards left: " + str(len(decksByUser[user].cards)))
         time.sleep(1)
+
         if len(decksByUser[user].cards) == 0:
             await ctx.send("Out of cards! getting a new deck...")
             time.sleep(1)
             await initDeck(user)
-    await ctx.send("Done drawing!") # Successes: " + str(numSuccesses) + ". Failures: " + str(numFailures)
+    
+    resultMessage = "```Total number of Successes: " + str(numSuccesses) + "\n"
 
-@bot.command()
-async def roll(ctx, dice: str):
-    """Rolls a dice in NdN format."""
-    try:
-        rolls, limit = map(int, dice.split('d'))
-    except Exception:
-        await ctx.send('Format has to be in NdN!')
-        return
+    if(queenOfHearts):
+        resultMessage += "Queen Of Hearts! Add your charm to the number of successes! \n"
+    
+    if(numFailures == 1):
+        resultMessage += "1 failure. " + random.choice(failureMessages) + "\n"
+    elif numFailures == 2:
+        resultMessage += "2 failures. " + random.choice(failureMessages) + "\n"
+    else:
+        resultMessage += "No failures, phew. \n"
+    
+    resultMessage += "```"
 
-    result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
-    await ctx.send(result)
+    await ctx.send(resultMessage)
 
 """
 Init script

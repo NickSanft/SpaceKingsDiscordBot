@@ -17,9 +17,9 @@ class Deck:
         
 
 class Card:
-    def __init__(self, suit, value, description):
+    def __init__(self, rank, suit, description):
         self.suit = suit
-        self.value = value
+        self.rank = rank
         self.description = description
 
 if __name__ == "__main__":
@@ -27,5 +27,5 @@ if __name__ == "__main__":
 
     card = deck.drawCard()
     print(card.suit)
-    print(card.value)
+    print(card.rank)
     print(card.description)

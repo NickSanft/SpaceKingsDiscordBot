@@ -8,10 +8,7 @@ from discord.ext import commands
 from discord.ext.commands import Bot
 
 """
-This is the main script for the Guild Wars 2 Bot for a discord server.
-
-In order to run this script, simply call this from the command line
-with the first argument being your Bot Token from the Discord API.
+This is the main script for the Space Kings Bot for a discord server.
 """
 
 help_attrs = dict(hidden=True)
@@ -88,7 +85,7 @@ async def draw(ctx, numCards: int):
     if(numFailures == 1):
         resultMessage += "1 failure. " + random.choice(failureMessages) + "\n"
     elif numFailures == 2:
-        resultMessage += "2 failures. " + random.choice(failureMessages) + "\n"
+        resultMessage += "2 failures. " + random.choice(criticalfailureMessages) + "\n"
     else:
         resultMessage += "No failures, phew. \n"
 

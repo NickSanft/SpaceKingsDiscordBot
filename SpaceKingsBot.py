@@ -11,15 +11,20 @@ from discord.ext.commands import Bot
 This is the main script for the Space Kings Bot for a discord server.
 """
 
+intents = discord.Intents.default()
+intents.message_content = True
 help_attrs = dict(hidden=True)
-bot = Bot(command_prefix='/', help_attrs=help_attrs)
+bot = Bot(command_prefix='/', help_attrs=help_attrs, intents=intents)
 decksByUser = {}
 
+notNumbersMessages = ["You really think numbers are letters, huh?",
+                      "You should really come with a warning label.",
+                      "I don’t know what your problem is, but I’m guessing it’s hard to pronounce.",
+                      "You’re not stupid! You just have bad luck when you’re thinking."]
 failureMessages = ["It couldn't be too bad, could it?",
                    "Maybe you'll just slip on a banana peel."]
 criticalfailureMessages = ["Pray to your gods.",
                            "Aw man, am I gonna die?", "This is funny in a cosmic sort of way."]
-
 
 """
 Bot Events
@@ -42,9 +47,12 @@ async def on_read():
 async def initDeck(user: str):
     decksByUser[user] = Deck()
 
+
 """
 Bot Commands
 """
+
+
 @bot.command()
 async def draw(ctx, numCards: int):
     author = ctx.message.author
@@ -69,7 +77,8 @@ async def draw(ctx, numCards: int):
         if card.isQueenOfHearts():
             queenOfHearts = True
 
-        await ctx.send(author.name + " drew: " + card.description + ". Cards left: " + str(len(decksByUser[user].cards)))
+        await ctx.send(
+            author.name + " drew: " + card.description + ". Cards left: " + str(len(decksByUser[user].cards)))
         time.sleep(1)
 
         if len(decksByUser[user].cards) == 0:
@@ -79,10 +88,10 @@ async def draw(ctx, numCards: int):
 
     resultMessage = "```Total number of Successes: " + str(numSuccesses) + "\n"
 
-    if(queenOfHearts):
+    if (queenOfHearts):
         resultMessage += "Queen Of Hearts! Add your charm to the number of successes! \n"
 
-    if(numFailures == 1):
+    if (numFailures == 1):
         resultMessage += "1 failure. " + random.choice(failureMessages) + "\n"
     elif numFailures == 2:
         resultMessage += "2 failures. " + random.choice(criticalfailureMessages) + "\n"
@@ -92,6 +101,21 @@ async def draw(ctx, numCards: int):
     resultMessage += "```"
 
     await ctx.send(resultMessage)
+
+
+@bot.command()
+async def roll(ctx, roll: str):
+    if roll.isnumeric():
+        rollnum = int(roll)
+        if (rollnum < 1):
+            userName = ctx.message.author.mention
+            resultString = "{}, get outta here with that nonsense".format(userName)
+        else:
+            resultString = "You rolled a: " + str(random.randrange(1, rollnum))
+    else:
+        resultString = random.choice(notNumbersMessages)
+    await ctx.send(resultString)
+
 
 """
 Init script

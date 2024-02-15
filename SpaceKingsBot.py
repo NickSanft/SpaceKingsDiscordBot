@@ -19,7 +19,6 @@ decksByUser = {}
 
 notNumbersMessages = ["You really think numbers are letters, huh?",
                       "You should really come with a warning label.",
-                      "I don’t know what your problem is, but I’m guessing it’s hard to pronounce.",
                       "You’re not stupid! You just have bad luck when you’re thinking."]
 failureMessages = ["It couldn't be too bad, could it?",
                    "Maybe you'll just slip on a banana peel."]

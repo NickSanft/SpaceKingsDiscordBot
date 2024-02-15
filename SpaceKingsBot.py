@@ -5,7 +5,7 @@ import random
 import time
 from DeckOfCards import Deck
 from discord.ext import commands
-from discord.ext.commands import Bot
+from discord.ext.commands import Bot, CommandInvokeError
 
 """
 This is the main script for the Space Kings Bot for a discord server.
@@ -104,14 +104,14 @@ async def draw(ctx, numCards: int):
 
 @bot.command()
 async def roll(ctx, roll: str):
-    if roll.isnumeric():
+    try:
         rollnum = int(roll)
         if (rollnum < 1):
             userName = ctx.message.author.mention
             resultString = "{}, get outta here with that nonsense".format(userName)
         else:
             resultString = "You rolled a: " + str(random.randrange(1, rollnum))
-    else:
+    except ValueError:
         resultString = random.choice(notNumbersMessages)
     await ctx.send(resultString)
 

@@ -1,5 +1,5 @@
 # SpaceKingsDiscordBot
-A simple card-drawing bot for the Space Kings RPG (https://supertry.itch.io/spacekings). Decks of cards are unique for each player.
+A simple card-drawing and dice bot for the Space Kings RPG (https://supertry.itch.io/spacekings). Decks of cards are unique for each player.
 
 ### Things you probably need:
  - **Git** - You can pick it up [here](https://git-scm.com/download/) if you don't have it. You need it to clone the repo.
@@ -20,4 +20,4 @@ Here are some quick, but detailed instructions on how to get the project running
 
 ### Commands:
 - /draw - This will draw the number of cards specified ("/draw 2"). In Space Kings, faces and aces are successes, Jokers are a failure, and the Queen Of Hearts is a critical success (1 + Charm successes)
-  
+- /roll - This will roll a dice with the number specifying how many sides ("/roll 20 to roll a d20").
